@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="app_name">Daily Medicine</string>
+
+    <string name="add_medicine">Add Medicine</string>
+    <string name="edit_medicine">Edit Medicine</string>
+
+    <string name="no_medicine_added">No Medicine Added.</string>
+
+    <string name="action_delete_all">Delete All</string>
+    <string name="action_done">Done</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_details">Details</string>
+
+    <string name="medicine_name">Medicine Name</string>
+    <string name="alarm_type">Choose Alarm Type</string>
+    <string name="times_to_take_medicine">How many time  you take this medicine daily ?</string>
+    <string name="set_times">Set all times of notifications.</string>
+
+    <string name="you_take_this_medicine">"You take this medicine "</string>
+    <string name="times_per_day">" time(s) per day"</string>
+
+    <string name="you_took_this_medicine">"You took this medicine "</string>
+    <string name="so_far">" time(s) so far"</string>
+
+    <string name="empty_view_title_text">No Medicine Added.</string>
+
+    <string name="you_take_this_medicine_at">You take this medicine at:</string>
+
+    <string name="out_of">" out of "</string>
+    <string name="times_today">" time(s) today"</string>
+
+    <string name="delete_one_dialog_msg">Delete This Medicine ?</string>
+    <string name="delete_all_dialog_msg">Delete all Medicines ?</string>
+
+    <string name="discard_changes">Discard changes ?</string>
+    <string name="discard">Discard</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="all_medicines_deleted">All Medicines Deleted</string>
+    <string name="No_medicines_to_delete">No Medicines To Delete</string>
+    <string name="medicine_deleted">Medicine Deleted</string>
+
+    <string name="medicine_requires_name">Medicine requires a name</string>
+    <string name="medicine_added">Medicine Added</string>
+    <string name="medicine_edited">Medicine Edited</string>
+
+    <string name="medicine_time">Medicine Time</string>
+    <string name="its_time_to_take_your_medicine1">"It\'s time to take "</string>
+    <string name="its_time_to_take_your_medicine2">, Don\'t miss it.</string>
+    <string name="took_it">Took It</string>
+    <string name="missed_it">Missed It</string>
+
+    <string name="first">First Time</string>
+    <string name="second">Second Time</string>
+    <string name="third">Third Time</string>
+    <string name="fourth">Fourth Time</string>
+    <string name="fifth">Fifth Time</string>
+    <string name="sixth">Sixth Time</string>
+
+</resources>

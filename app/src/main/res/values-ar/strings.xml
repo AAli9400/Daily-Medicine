@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">الدواء اليومي</string>
+
+    <string name="add_medicine">إضافة الدواء</string>
+    <string name="edit_medicine">تعديل الدواء</string>
+
+    <string name="no_medicine_added">لا توجد ادوية مضافة.</string>
+
+    <string name="action_delete_all">حذف الكل</string>
+    <string name="action_done">تم</string>
+    <string name="action_delete">حذف</string>
+    <string name="action_edit">تعديل</string>
+    <string name="action_details">التفاصيل</string>
+
+    <string name="medicine_name">اسم الدواء</string>
+    <string name="alarm_type">إختر نوع التنبيه</string>
+    <string name="times_to_take_medicine">كم مره تتناول هذا الدواء يوميا ؟</string>
+    <string name="set_times">قم بضبط اوقات التنبيهات.</string>
+
+    <string name="you_take_this_medicine">"انت تتناول هذا الدواء "</string>
+    <string name="times_per_day">" من المرات يوميا"</string>
+
+    <string name="you_took_this_medicine">"لقد تناولت هذا الدواء "</string>
+    <string name="so_far">" من المرات حتي الان"</string>
+
+    <string name="empty_view_title_text">لم يتم إضافة دواء.</string>
+
+    <string name="you_take_this_medicine_at">"مواعيد تناولك لهذا الدواء :"</string>
+
+
+    <string name="out_of">" من "</string>
+    <string name="times_today">" من المرات اليوم"</string>
+
+
+    <string name="delete_one_dialog_msg">حذف هذا الدواء ؟</string>
+    <string name="delete_all_dialog_msg">حذف كل الادوية ؟</string>
+
+    <string name="discard_changes">تجاهل التغييرات ؟</string>
+    <string name="discard">تجاهل</string>
+    <string name="delete">حذف</string>
+    <string name="cancel">إلغاء</string>
+
+    <string name="all_medicines_deleted">تم حذف جميع الادوية</string>
+    <string name="No_medicines_to_delete">لاتوجد ادوية لحذفها</string>
+    <string name="medicine_deleted">تم حذف هذا الدواء</string>
+
+    <string name="medicine_requires_name">اسم الدواء مطلوب</string>
+    <string name="medicine_added">تمت إضافة الدواء</string>
+    <string name="medicine_edited">تم تعديل الدواء</string>
+
+
+    <string name="medicine_time">وقت الدواء</string>
+    <string name="its_time_to_take_your_medicine1">"حان وقت تناولك لـ "</string>
+    <string name="its_time_to_take_your_medicine2">" ، لاتفوته."</string>
+    <string name="took_it">تناولته</string>
+    <string name="missed_it">فوتّه</string>
+
+    <string name="first">الوقت الاول</string>
+    <string name="second">الوقت الثاني</string>
+    <string name="third">الوقت الثالث</string>
+    <string name="fourth">الوقت الرابع</string>
+    <string name="fifth">الوقت الخامس</string>
+    <string name="sixth">الوقت السادس</string>
+</resources>
