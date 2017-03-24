@@ -4,3 +4,5 @@
 * Every day at 12:00 AM, the number of how many times patient took medicine for all medicines in the database will be updated to 0 to start counting for the new day.
 
 * All entered medicines will be shown in a list view, each item will present medicine name, how many times user pressed (took it) action that was on the notification of this medicine and out of how many times user should take this medicine. 
+
+* Unfortunately, app is not on play store yet, Kindly find the apk at APK folder.
