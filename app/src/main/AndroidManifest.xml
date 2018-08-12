@@ -15,8 +15,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,33 +30,22 @@
                 android:value="com.example.android.dailyMedicine.MainActivity" />
         </activity>
 
-        <provider
-            android:name=".data.MedicineProvider"
-            android:authorities="com.example.android.dailyMedicine"
-            android:exported="false" />
-
         <receiver
-            android:name=".notification.AlarmReceiver"
+            android:name=".service.AlarmReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="com.example.android.dailyMedicine.RESET_DAILY" />
-                <action android:name="com.example.android.dailyMedicine.NOTIFICATION" />
             </intent-filter>
         </receiver>
 
         <service
-            android:name=".notification.NotificationService"
+            android:name=".service.NotificationService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".notification.UpdateService"
+            android:name=".service.RescheduleNotificationsOnBoot"
             android:enabled="true"
             android:exported="false" />
-        <service
-            android:name=".notification.AlarmService"
-            android:enabled="true"
-            android:exported="false" />
-
     </application>
+
 </manifest>

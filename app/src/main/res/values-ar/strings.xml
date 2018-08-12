@@ -16,7 +16,7 @@
     <string name="medicine_name">اسم الدواء</string>
     <string name="alarm_type">إختر نوع التنبيه</string>
     <string name="times_to_take_medicine">كم مره تتناول هذا الدواء يوميا ؟</string>
-    <string name="set_times">قم بضبط اوقات التنبيهات.</string>
+    <string name="set_times">قم بضبط الوقت التالي لأخذك للدواءاليوم:</string>
 
     <string name="you_take_this_medicine">"انت تتناول هذا الدواء "</string>
     <string name="times_per_day">" من المرات يوميا"</string>
@@ -52,14 +52,10 @@
 
     <string name="medicine_time">وقت الدواء</string>
     <string name="its_time_to_take_your_medicine1">"حان وقت تناولك لـ "</string>
-    <string name="its_time_to_take_your_medicine2">" ، لاتفوته."</string>
     <string name="took_it">تناولته</string>
     <string name="missed_it">فوتّه</string>
 
-    <string name="first">الوقت الاول</string>
-    <string name="second">الوقت الثاني</string>
-    <string name="third">الوقت الثالث</string>
-    <string name="fourth">الوقت الرابع</string>
-    <string name="fifth">الوقت الخامس</string>
-    <string name="sixth">الوقت السادس</string>
+    <string name="not_valid_time">من فضلك ادخل توقيت صحيح !</string>
+    <string name="saving">يتم الحفظ</string>
+
 </resources>

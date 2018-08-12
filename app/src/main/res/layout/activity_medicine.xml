@@ -39,105 +39,15 @@
             android:id="@+id/set_all_times_of_notifications"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_margin="16dp"
             android:gravity="center"
             android:text="@string/set_times"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/textBlack" />
 
-
-        <TextView
-            android:id="@+id/time_hint_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/first"
-            android:textAppearance="?android:textAppearanceMedium" />
-
         <TimePicker
-            android:id="@+id/time_1"
+            android:id="@+id/first_time"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/time_hint_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/second"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:visibility="gone" />
-
-        <TimePicker
-            android:id="@+id/time_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/time_hint_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/third"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:visibility="gone" />
-
-        <TimePicker
-            android:id="@+id/time_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/time_hint_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/fourth"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:visibility="gone" />
-
-        <TimePicker
-            android:id="@+id/time_4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/time_hint_5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/fifth"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:visibility="gone" />
-
-        <TimePicker
-            android:id="@+id/time_5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/time_hint_6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/sixth"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:visibility="gone" />
-
-        <TimePicker
-            android:id="@+id/time_6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:visibility="gone" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </ScrollView>
