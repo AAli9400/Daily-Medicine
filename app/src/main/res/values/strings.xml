@@ -55,5 +55,6 @@
     <string name="am">" AM"</string>
     <string name="pm">" PM"</string>
     <string name="saving">Saving</string>
+    <string name="edit">Edit</string>
 
 </resources>

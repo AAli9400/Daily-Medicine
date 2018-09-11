@@ -10,13 +10,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/medicine_name_edit_text"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:hint="@string/medicine_name"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/medicine_name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/medicine_name"
+                android:textAppearance="?android:textAppearanceMedium" />
+        </android.support.design.widget.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,20 +39,5 @@
             android:layout_marginTop="16dp"
             android:spinnerMode="dialog"
             android:textAppearance="?android:textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/set_all_times_of_notifications"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:gravity="center"
-            android:text="@string/set_times"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/textBlack" />
-
-        <TimePicker
-            android:id="@+id/first_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 </ScrollView>

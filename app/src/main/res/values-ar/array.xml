@@ -4,4 +4,13 @@
         <item>إشعار</item>
         <item>منبّه</item>
     </string-array>
+
+    <string-array name="spinner_take_times">
+        <item>١</item>
+        <item>٢</item>
+        <item>٣</item>
+        <item>٤</item>
+        <item>٥</item>
+        <item>٦</item>
+    </string-array>
 </resources>

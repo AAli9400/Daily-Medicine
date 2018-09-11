@@ -57,5 +57,6 @@
 
     <string name="not_valid_time">من فضلك ادخل توقيت صحيح !</string>
     <string name="saving">يتم الحفظ</string>
+    <string name="edit">تعديل</string>
 
 </resources>
