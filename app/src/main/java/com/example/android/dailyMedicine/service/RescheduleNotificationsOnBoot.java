@@ -7,9 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import com.example.android.dailyMedicine.Util.Constants;
-import com.example.android.dailyMedicine.db.AppDatabase;
 import com.example.android.dailyMedicine.db.Medicine;
+import com.example.android.dailyMedicine.repository.DatabaseRepository;
+import com.example.android.dailyMedicine.util.Constants;
 
 import java.util.Calendar;
 import java.util.List;
@@ -22,8 +22,9 @@ public class RescheduleNotificationsOnBoot extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        AppDatabase mDb = AppDatabase.getInstance(this);
-        List<Medicine> medicines = mDb.medicineDao().getAllMedicines();
+        DatabaseRepository repository = new DatabaseRepository(getApplication());
+        List<Medicine> medicines = repository.getAllMedicines().getValue();
+
         for (int i = medicines.size() - 1; i >= 0; --i) {
             Medicine medicine = medicines.get(i);
 
@@ -48,8 +49,15 @@ public class RescheduleNotificationsOnBoot extends IntentService {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, medicine.getFirstHour());
-        calendar.set(Calendar.MINUTE, medicine.getFirstMin());
+        int hour = 0;
+        while (hour <= calendar.get(Calendar.HOUR_OF_DAY)) {
+            hour += (24 / medicine.getMedicineTotalNumberOfTakeTimesPerDay());
+            if (hour >= 24) {
+                hour %= 24;
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
+        }
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
 
         if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
             calendar.add(Calendar.HOUR_OF_DAY, INTERVAL);

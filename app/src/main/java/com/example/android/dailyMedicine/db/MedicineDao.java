@@ -9,22 +9,18 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
+
 @Dao
 public interface MedicineDao {
-    @Query("SELECT _ID FROM medicine ORDER BY _ID DESC LIMIT 1")
-    Integer getLastInsertedMedicineId();
-
     @Query("SELECT * FROM medicine")
-    LiveData<List<Medicine>> getAllMedicinesAsLiveData();
-
-    @Query("SELECT * FROM medicine")
-    List<Medicine> getAllMedicines();
+    LiveData<List<Medicine>> getAllMedicines();
 
     @Query("SELECT * FROM medicine WHERE _ID = :id")
-    Medicine getMedicineById(int id);
+    Medicine getMedicineById(long id);
 
-    @Insert
-    void insertMedicine(Medicine medicine);
+    @Insert(onConflict = REPLACE)
+    long insertMedicine(Medicine medicine);
 
     @Delete
     void deleteMedicine(Medicine medicine);
@@ -32,9 +28,6 @@ public interface MedicineDao {
     @Query("DELETE FROM medicine")
     void deleteAllMedicines();
 
-    @Query("DELETE FROM medicine WHERE _ID = :id")
-    void deleteMedicineById(int id);
-
-    @Update
+    @Update(onConflict = REPLACE)
     void updateMedicine(Medicine medicine);
 }

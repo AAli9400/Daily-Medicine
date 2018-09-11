@@ -2,36 +2,66 @@ package com.example.android.dailyMedicine.db;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-import com.example.android.dailyMedicine.Util.Constants;
+import com.example.android.dailyMedicine.util.Constants;
+
+import java.util.Date;
 
 @Entity(tableName = Constants.MEDICINE_TABLE_NAME)
 public class Medicine {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_ID")
-    private Integer _ID;
+    private int _ID;
 
     @ColumnInfo(name = "name")
     private String medicineName;
 
-    @ColumnInfo(name = "total_number_of_times_per_day")
+    @ColumnInfo(name = "total_number_of_take_times_per_day")
     private int medicineTotalNumberOfTakeTimesPerDay;
 
-    @ColumnInfo(name = "total_number_of_taken_times_per_day")
-    private int MedicineTotalNumberOfTakenTimesPerDay;
+    @ColumnInfo(name = "total_number_of_taken_times_today")
+    private int medicineTotalNumberOfTakenTimesToday;
 
-    @ColumnInfo(name = "first_hour")
-    private int firstHour;
+    @ColumnInfo(name = "insert_date")
+    private Date date;
 
-    @ColumnInfo(name = "first_min")
-    private int firstMin;
+    public Medicine(int _ID, String medicineName, int medicineTotalNumberOfTakeTimesPerDay, int medicineTotalNumberOfTakenTimesToday, Date date) {
+        this._ID = _ID;
+        this.medicineName = medicineName;
+        this.medicineTotalNumberOfTakeTimesPerDay = medicineTotalNumberOfTakeTimesPerDay;
+        this.medicineTotalNumberOfTakenTimesToday = medicineTotalNumberOfTakenTimesToday;
+        this.date = date;
+    }
 
-    public Integer get_ID() {
+    @Ignore
+    public Medicine(int _ID, String medicineName, int medicineTotalNumberOfTakeTimesPerDay) {
+        this._ID = _ID;
+        this.medicineName = medicineName;
+        this.medicineTotalNumberOfTakeTimesPerDay = medicineTotalNumberOfTakeTimesPerDay;
+        medicineTotalNumberOfTakenTimesToday = 0;
+        this.date = new Date();
+    }
+
+    @Ignore
+    public Medicine(String medicineName, int medicineTotalNumberOfTakeTimesPerDay) {
+        this.medicineName = medicineName;
+        this.medicineTotalNumberOfTakeTimesPerDay = medicineTotalNumberOfTakeTimesPerDay;
+        medicineTotalNumberOfTakenTimesToday = 0;
+        this.date = new Date();
+    }
+
+    @Ignore
+    public Medicine() {
+        this.date = new Date();
+    }
+
+    public int get_ID() {
         return _ID;
     }
 
-    public void set_ID(Integer _ID) {
+    public void set_ID(int _ID) {
         this._ID = _ID;
     }
 
@@ -51,31 +81,23 @@ public class Medicine {
         this.medicineTotalNumberOfTakeTimesPerDay = medicineTotalNumberOfTakeTimesPerDay;
     }
 
-    public int getMedicineTotalNumberOfTakenTimesPerDay() {
-        return MedicineTotalNumberOfTakenTimesPerDay;
+    public int getMedicineTotalNumberOfTakenTimesToday() {
+        return medicineTotalNumberOfTakenTimesToday;
     }
 
-    public void setMedicineTotalNumberOfTakenTimesPerDay(int medicineTotalNumberOfTakenTimesPerDay) {
-        MedicineTotalNumberOfTakenTimesPerDay = medicineTotalNumberOfTakenTimesPerDay;
+    public void setMedicineTotalNumberOfTakenTimesToday(int medicineTotalNumberOfTakenTimesToday) {
+        this.medicineTotalNumberOfTakenTimesToday = medicineTotalNumberOfTakenTimesToday;
     }
 
-    public int getFirstHour() {
-        return firstHour;
+    public Date getDate() {
+        return date;
     }
 
-    public void setFirstHour(int firstHour) {
-        this.firstHour = firstHour;
-    }
-
-    public int getFirstMin() {
-        return firstMin;
-    }
-
-    public void setFirstMin(int firstMin) {
-        this.firstMin = firstMin;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public int getMedicineIdForPendingIntent() {
-        return _ID + 3;
+        return this._ID + 3;
     }
 }

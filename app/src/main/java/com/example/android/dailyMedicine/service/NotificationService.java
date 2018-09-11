@@ -12,11 +12,11 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
-import com.example.android.dailyMedicine.MainActivity;
 import com.example.android.dailyMedicine.R;
 import com.example.android.dailyMedicine.db.AppDatabase;
 import com.example.android.dailyMedicine.db.Medicine;
-import com.example.android.dailyMedicine.Util.Constants;
+import com.example.android.dailyMedicine.ui.MainActivity;
+import com.example.android.dailyMedicine.util.Constants;
 
 import java.util.Calendar;
 
@@ -69,14 +69,17 @@ public class NotificationService extends IntentService {
     }
 
     private void performActionTookIt(int medicineId) {
+        cancelNotification(medicineId);
+
         //update the medicine
         Medicine medicine = mDb.medicineDao().getMedicineById(medicineId);
-        medicine.setMedicineTotalNumberOfTakenTimesPerDay(
-                medicine.getMedicineTotalNumberOfTakenTimesPerDay() + 1
-        );
-        mDb.medicineDao().updateMedicine(medicine);
 
-        cancelNotification(medicineId);
+        int totalNumberOfTakenTimesToday = medicine.getMedicineTotalNumberOfTakenTimesToday();
+        if (totalNumberOfTakenTimesToday < medicine.getMedicineTotalNumberOfTakeTimesPerDay()) {
+            medicine.setMedicineTotalNumberOfTakenTimesToday(totalNumberOfTakenTimesToday + 1);
+        }
+
+        mDb.medicineDao().updateMedicine(medicine);
     }
 
     private Notification buildNotification(int medicineId, String medicineName) {
@@ -164,6 +167,15 @@ public class NotificationService extends IntentService {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis() + INTERVAL_IN_MILLIS);
+        int hour = 0;
+        while (hour <= calendar.get(Calendar.HOUR_OF_DAY)) {
+            hour += (24 / medicine.getMedicineTotalNumberOfTakeTimesPerDay());
+            if (hour >= 24) {
+                hour %= 24;
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
+        }
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
 
         AlarmManager alarmMgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 

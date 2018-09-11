@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.android.dailyMedicine.Util.Constants;
+import com.example.android.dailyMedicine.util.Constants;
 
 
 public class AlarmReceiver extends BroadcastReceiver {
