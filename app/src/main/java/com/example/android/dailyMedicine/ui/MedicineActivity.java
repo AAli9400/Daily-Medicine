@@ -312,7 +312,12 @@ public class MedicineActivity extends AppCompatActivity implements AdapterView.O
             //reset medicine times
             mViewModel.resetTimes();
 
-        } else mIsSpinnerClicked = true;
+            //generate default times based on user selection of number of daily take times
+            mViewModel.generateTimes(Integer.valueOf((String) parent.getSelectedItem()));
+
+        } else {
+            mIsSpinnerClicked = true;
+        }
 
         //if user is adding new medicine
         if (!mIsActivityForEdit) {

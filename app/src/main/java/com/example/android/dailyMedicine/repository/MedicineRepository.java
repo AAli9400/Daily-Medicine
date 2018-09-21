@@ -69,8 +69,17 @@ public class MedicineRepository {
         executor.diskIO().execute(() -> {
             medicineDao.updateMedicine(medicine);
 
+            //cancel any scheduled alarm
             cancelAlarm(medicine);
-            scheduleNextAlarm(medicine);
+
+            //schedule the next alarm
+            String nextAlarm = scheduleNextAlarm(medicine);
+
+            //set medicine next alarm
+            medicine.setNextAlarm(nextAlarm);
+
+            //update the medicine without rescheduling the alarm
+            updateMedicineWithNoAlarmRescheduling(medicine);
         });
     }
 

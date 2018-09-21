@@ -7,8 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.example.android.dailyMedicine.Service.AppService;
 import com.example.android.dailyMedicine.model.Medicine;
+import com.example.android.dailyMedicine.service.AppService;
+import com.example.android.dailyMedicine.ui.MainActivity;
 import com.google.gson.Gson;
 
 import java.util.Calendar;
@@ -48,7 +49,21 @@ public class MedicineAlarmUtil {
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
 
-        AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(triggerTime, pendingIntent);
+        //create intent to the MainActivity
+        Intent mainActivityIntent = new Intent(application, MainActivity.class);
+
+        //add flags to handle the stack properly
+        mainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        //create the pending intent
+        PendingIntent mainActivityPendingIntent = PendingIntent.getActivity(
+                application,
+                -1,
+                mainActivityIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(triggerTime, mainActivityPendingIntent);
 
         alarmManager.setAlarmClock(clockInfo, pendingIntent);
     }
