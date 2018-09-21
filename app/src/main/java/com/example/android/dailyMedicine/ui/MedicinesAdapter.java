@@ -73,7 +73,7 @@ public class MedicinesAdapter extends RecyclerView.Adapter<MedicinesAdapter.View
             //set mMedicineNextAlarmTextView to show thw next alarm
             String medicineNextAlarm = "Next alarm at: " + hourOfDay + ":" + minute + ".";
             holder.mMedicineNextAlarmTextView.setText(medicineNextAlarm);
-        }else{
+        } else {
             holder.mMedicineNextAlarmTextView.setText("No Alarm Scheduled.");
         }
 
@@ -85,8 +85,12 @@ public class MedicinesAdapter extends RecyclerView.Adapter<MedicinesAdapter.View
         Bitmap picture = medicine.getPicture();
         if (picture != null) {
             //if the picture is not null
-            //set mMedicinePicture to the medicine picture
-            holder.mMedicinePicture.setImageBitmap(picture);
+            //set mMedicinePictureImageView to the medicine picture
+            holder.mMedicinePictureImageView.setImageBitmap(picture);
+        } else {
+            //make mMedicinePictureImageView empty
+            // in case it holding a picture of another medicine
+            holder.mMedicinePictureImageView.setImageBitmap(null);
         }
 
         //set the list item click listener
@@ -129,7 +133,7 @@ public class MedicinesAdapter extends RecyclerView.Adapter<MedicinesAdapter.View
         TextView mMedicineNextAlarmTextView;
 
         @BindView(R.id.medicine_picture)
-        ImageView mMedicinePicture;
+        ImageView mMedicinePictureImageView;
 
         @BindView(R.id.medicine_added_date)
         TextView mMedicineAddedDateTextView;
