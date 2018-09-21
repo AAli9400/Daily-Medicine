@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.dailyMedicine">
-
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    package="com.example.android.dailymedicine">
 
     <application
         android:allowBackup="true"
@@ -13,9 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:name="com.example.android.dailyMedicine.ui.MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,29 +19,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MedicineActivity"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.dailyMedicine.MainActivity" />
-        </activity>
+            android:name="com.example.android.dailyMedicine.ui.MedicineActivity"
+            android:parentActivityName="com.example.android.dailyMedicine.ui.MainActivity" />
+
+        <service
+            android:name="com.example.android.dailyMedicine.Service.AppService"
+            android:exported="false" />
 
         <receiver
-            android:name=".service.AlarmReceiver"
-            android:enabled="true">
+            android:name="com.example.android.dailyMedicine.Service.AppReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-
-        <service
-            android:name=".service.NotificationService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".service.RescheduleNotificationsOnBoot"
-            android:enabled="true"
-            android:exported="false" />
     </application>
 
 </manifest>

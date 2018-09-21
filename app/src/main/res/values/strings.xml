@@ -1,60 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <string name="app_name">Daily Medicine</string>
+    <string name="action_settings">Settings</string>
+    <string name="medicine_key">medicine</string>
+    <string name="channel_name">Medicine Notification</string>
+    <string name="channel_description">Notification channel for the Daily Medicine App</string>
+    <string name="today_key">today</string>
 
-    <string name="add_medicine">Add Medicine</string>
-    <string name="edit_medicine">Edit Medicine</string>
-
-    <string name="no_medicine_added">No Medicine Added.</string>
-
-    <string name="action_delete_all">Delete All</string>
-    <string name="action_done">Done</string>
-    <string name="action_delete">Delete</string>
-
-    <string name="medicine_name">Medicine Name</string>
-    <string name="times_to_take_medicine">How many times you take this medicine daily ?</string>
-    <string name="set_times">Set the next time you should take the medicine today:</string>
-
-    <string name="you_take_this_medicine">"You take this medicine "</string>
-    <string name="times_per_day">" time(s) per day"</string>
-
-    <string name="empty_view_title_text">No Medicine Added.</string>
-
-    <string name="you_take_this_medicine_at">You take this medicine at:</string>
-
-    <string name="out_of">" out of "</string>
-    <string name="times_today">" today"</string>
-
-    <string name="delete_one_dialog_msg">Delete This Medicine ?</string>
-    <string name="delete_all_dialog_msg">Delete all Medicines ?</string>
-
-    <string name="discard_changes">Discard changes ?</string>
-    <string name="discard">Discard</string>
-    <string name="delete">Delete</string>
-    <string name="cancel">Cancel</string>
-
-    <string name="all_medicines_deleted">All Medicines Deleted</string>
-    <string name="No_medicines_to_delete">No Medicines To Delete</string>
-    <string name="medicine_deleted">Medicine Deleted</string>
-
-    <string name="medicine_requires_name">Medicine requires a name</string>
-    <string name="medicine_added">Medicine Added</string>
-    <string name="medicine_edited">Medicine Edited</string>
-
-    <string name="its_time_to_take_your_medicine1">"It\'s time to take "</string>
-    <string name="took_it">Took It</string>
-    <string name="missed_it">Missed It</string>
-
-    <string name="channel_name" translatable="false">Daily Medicine</string>
-    <string name="channel_description" translatable="false">Notification channel of Daily Medicine App</string>
-
-    <string name="not_valid_time">Please set a valid time !</string>
-    <string name="medicine_time">Medicine time</string>
-
-    <string name="am">" AM"</string>
-    <string name="pm">" PM"</string>
-    <string name="saving">Saving</string>
-    <string name="edit">Edit</string>
+    <string-array name="medicine_take_times">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
 
 </resources>

@@ -7,27 +7,32 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.example.android.dailyMedicine.model.Medicine;
+
 import java.util.List;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface MedicineDao {
-    @Query("SELECT * FROM medicine")
-    LiveData<List<Medicine>> getAllMedicines();
+    @Query("SELECT * FROM Medicine")
+    LiveData<List<Medicine>> loadAllMedicines();
 
-    @Query("SELECT * FROM medicine WHERE _ID = :id")
-    Medicine getMedicineById(long id);
-
-    @Insert(onConflict = REPLACE)
+    @Insert
     long insertMedicine(Medicine medicine);
+
+    @Update(onConflict = REPLACE)
+    void updateMedicine(Medicine medicine);
 
     @Delete
     void deleteMedicine(Medicine medicine);
 
-    @Query("DELETE FROM medicine")
-    void deleteAllMedicines();
+    @Query("UPDATE Medicine SET taken_times = :takenTimes WHERE id = :id")
+    void updateTakenTimes(int id, int takenTimes);
 
-    @Update(onConflict = REPLACE)
-    void updateMedicine(Medicine medicine);
+    @Query("SELECT taken_times FROM Medicine WHERE id = :id")
+    int getTakenTimes(int id);
+
+    @Query("SELECT take_times FROM Medicine WHERE id = :id")
+    int getDailyTakeTimes(int id);
 }

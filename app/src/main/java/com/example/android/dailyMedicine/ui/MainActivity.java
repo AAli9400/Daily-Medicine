@@ -1,140 +1,116 @@
 package com.example.android.dailyMedicine.ui;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.example.android.dailyMedicine.R;
-import com.example.android.dailyMedicine.db.Medicine;
-import com.example.android.dailyMedicine.repository.MainActivityViewModel;
-import com.example.android.dailyMedicine.util.Constants;
+import com.example.android.dailyMedicine.model.Medicine;
+import com.example.android.dailyMedicine.viewmodel.MainActivityViewModel;
+import com.example.android.dailymedicine.R;
+import com.google.gson.Gson;
 
-import java.util.List;
+import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements MedicineAdapter.Resources,
-        MedicineAdapter.ActionListener {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private View mEmptyView;
+public class MainActivity extends AppCompatActivity implements MedicinesAdapter.ViewActions {
 
-    private MainActivityViewModel viewModel;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+
+    @BindView(R.id.empty_view)
+    TextView mEmptyView;
+
+    @BindView(R.id.fab)
+    FloatingActionButton mFab;
+
+    private MainActivityViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView medicinesRecyclerView = findViewById(R.id.rv_medicines);
+        //bind the views with ButterKnife library
+        ButterKnife.bind(this);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        medicinesRecyclerView.setLayoutManager(linearLayoutManager);
+        //add the recycler view adapter
+        MedicinesAdapter adapter = new MedicinesAdapter(this, null);
+        mRecyclerView.setAdapter(adapter);
 
-        viewModel =
-                ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        //set the layoutManager of the recycler view
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        final MedicineAdapter medicineAdapter =
-                new MedicineAdapter(null, this, this);
-        medicinesRecyclerView.setAdapter(medicineAdapter);
+        //get the view model instance
+        mViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
-        viewModel.getAllMedicines()
-                .observe(this, new Observer<List<Medicine>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Medicine> medicines) {
-                        medicineAdapter.updateData(medicines);
+        //observe medicines changes
+        //update the adapter data
+        mViewModel.getMedicines().observe(this, adapter::setMedicines);
 
-                        setEmptyViewVisibility(
-                                ((medicines != null ? medicines.size() : 0) == 0) ?
-                                        View.VISIBLE : View.INVISIBLE
-                        );
-                    }
-                });
+        //navigate to the @MedicineActivity when click the add floating action button
+        // to add new medicine
+        mFab.setOnClickListener(v -> {
+            //create an intent to MedicineActivity
+            Intent medicineIntent = new Intent(getApplicationContext(), MedicineActivity.class);
 
-
-        // Setting the empty view of the list view,
-        // in case no medicine added.
-        mEmptyView = findViewById(R.id.empty_view);
-
-        // Setting the click listener of the floating action button.
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Open the MedicineActivity to add new medicine.
-                Intent intent = new Intent(MainActivity.this, MedicineActivity.class);
-                startActivity(intent);
-            }
+            //start the activity to add new medicine
+            startActivity(medicineIntent);
         });
     }
 
-    private void setEmptyViewVisibility(int visibility) {
+    //region MedicinesAdapter.ViewActions
+    @Override
+    public void setEmptyViewVisibility(int visibility) {
+        //set the empty view visibility to be equal to visibility
         mEmptyView.setVisibility(visibility);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public void onRecyclerItemClickListener(Medicine medicine) {
+        //create an intent to MedicineActivity
+        Intent editMedicineIntent = new Intent(this, MedicineActivity.class);
+
+        //put the medicine to the intent as string usin Gson library
+        editMedicineIntent.putExtra(getString(R.string.medicine_key), new Gson().toJson(medicine));
+
+        //start the activity to edit the clicked medicine
+        startActivity(editMedicineIntent);
     }
 
+    //endregion MedicinesAdapter.ViewActions
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_delete_all:
-                if (viewModel.getMedicinesSize() == 0) {
-                    Toast.makeText(
-                            this,
-                            getString(R.string.no_medicine_added),
-                            Toast.LENGTH_LONG
-                    ).show();
-                } else {
-                    confirmAndDeleteAllMedicines();
-                }
-                return true;
+    protected void onStart() {
+        super.onStart();
+
+        //get today as int
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        int today = calendar.get(Calendar.DAY_OF_YEAR);
+
+        //get the stored today in the SharedPreferences
+        SharedPreferences preferences = getSharedPreferences("day", MODE_PRIVATE);
+        int storedDay = preferences.getInt(getString(R.string.today_key), -1);
+
+        //if there is no previous value
+        if (storedDay != -1 && today != storedDay) {
+            //if today != the stored today
+            //reset takenTimes for all stored medicines
+            mViewModel.resetTakenTimes();
         }
-        return super.onOptionsItemSelected(item);
-    }
 
-    @Override
-    public String getStringResources(int resId) {
-        return getResources().getString(resId);
-    }
-
-    @Override
-    public void onListItemClickListener(int medicineId, String medicineName, int medicineTakeTimes) {
-        Intent medicineActivityIntent = new Intent(this, MedicineActivity.class);
-        medicineActivityIntent.putExtra(Constants.MEDICINE_ID_EXTRA, medicineId);
-        medicineActivityIntent.putExtra(Constants.MEDICINE_NAME_EXTRA, medicineName);
-        medicineActivityIntent.putExtra(Constants.MEDICINE_TAKE_TIMES_EXTRA, medicineTakeTimes);
-        startActivity(medicineActivityIntent);
-    }
-
-    public void confirmAndDeleteAllMedicines() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.delete_all_dialog_msg);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                viewModel.deleteAllMedicines();
-            }
-        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        //put the int value of today in a SharedPreferences
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(getString(R.string.today_key), today);
+        editor.apply();
     }
 }
+

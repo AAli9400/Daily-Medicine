@@ -6,24 +6,27 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-import com.example.android.dailyMedicine.util.Constants;
+import com.example.android.dailyMedicine.db.converter.BitmapConverter;
+import com.example.android.dailyMedicine.db.converter.DateConverter;
+import com.example.android.dailyMedicine.db.converter.MedicineTimeConverter;
+import com.example.android.dailyMedicine.model.Medicine;
 
 @Database(entities = {Medicine.class}, version = 1, exportSchema = false)
-@TypeConverters(DateConverter.class)
+@TypeConverters({DateConverter.class, BitmapConverter.class, MedicineTimeConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
+
+    private static AppDatabase ourInstance = null;
+
     public abstract MedicineDao medicineDao();
 
-    private static AppDatabase INSTANCE;
-    private static final Object LOCK = new Object();
-
     public static AppDatabase getInstance(Context context) {
-        if (INSTANCE == null) {
-            synchronized (LOCK) {
-                INSTANCE = Room.databaseBuilder(context, AppDatabase.class, Constants.DATABASE_NAME)
+        if (ourInstance == null) {
+            synchronized (AppDatabase.class) {
+                ourInstance = Room.databaseBuilder(context, AppDatabase.class, "dailymedicine.db")
                         .build();
             }
         }
 
-        return INSTANCE;
+        return ourInstance;
     }
 }
