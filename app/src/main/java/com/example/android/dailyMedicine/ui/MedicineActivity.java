@@ -305,26 +305,29 @@ public class MedicineActivity extends AppCompatActivity implements AdapterView.O
     }
 
     //region AdapterView.OnItemSelectedListener
+    
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         //avoid resetting times first time user enters the activity
-        if (mIsSpinnerClicked) {
+        if (!mIsSpinnerClicked) {
+            mIsSpinnerClicked = true;
+
+            if (!mIsActivityForEdit) {
+                //generate default times based on user selection of number of daily take times
+                mViewModel.generateTimes(Integer.valueOf((String) parent.getSelectedItem()));
+            }
+        } else {
             //reset medicine times
             mViewModel.resetTimes();
-        } else {
-            mIsSpinnerClicked = true;
-        }
 
-        //if user is adding new medicine or updating times
-        if (!mIsActivityForEdit || mIsSpinnerClicked) {
             //generate default times based on user selection of number of daily take times
             mViewModel.generateTimes(Integer.valueOf((String) parent.getSelectedItem()));
         }
-
+        
         //show the generated times to user
         mTimesTextView.setText(mViewModel.getMedicineTimesAsString());
     }
-
+    
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         //do nothing
