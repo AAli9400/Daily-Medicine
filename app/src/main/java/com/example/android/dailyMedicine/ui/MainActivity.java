@@ -2,7 +2,6 @@ package com.example.android.dailyMedicine.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +13,6 @@ import com.example.android.dailyMedicine.model.Medicine;
 import com.example.android.dailyMedicine.viewmodel.MainActivityViewModel;
 import com.example.android.dailymedicine.R;
 import com.google.gson.Gson;
-
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,8 +27,6 @@ public class MainActivity extends AppCompatActivity implements MedicinesAdapter.
 
     @BindView(R.id.fab)
     FloatingActionButton mFab;
-
-    private MainActivityViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +44,11 @@ public class MainActivity extends AppCompatActivity implements MedicinesAdapter.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         //get the view model instance
-        mViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        MainActivityViewModel viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
         //observe medicines changes
         //update the adapter data
-        mViewModel.getMedicines().observe(this, adapter::setMedicines);
+        viewModel.getMedicines().observe(this, adapter::setMedicines);
 
         //navigate to the @MedicineActivity when click the add floating action button
         // to add new medicine
@@ -86,31 +81,5 @@ public class MainActivity extends AppCompatActivity implements MedicinesAdapter.
     }
 
     //endregion MedicinesAdapter.ViewActions
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        //get today as int
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        int today = calendar.get(Calendar.DAY_OF_YEAR);
-
-        //get the stored today in the SharedPreferences
-        SharedPreferences preferences = getSharedPreferences("day", MODE_PRIVATE);
-        int storedDay = preferences.getInt(getString(R.string.today_key), -1);
-
-        //if there is no previous value
-        if (storedDay != -1 && today != storedDay) {
-            //if today != the stored today
-            //reset takenTimes for all stored medicines
-            mViewModel.resetTakenTimes();
-        }
-
-        //put the int value of today in a SharedPreferences
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(getString(R.string.today_key), today);
-        editor.apply();
-    }
 }
 

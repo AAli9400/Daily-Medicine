@@ -13,14 +13,7 @@ public class AppReceiver extends BroadcastReceiver {
             //get the action
             final String action = intent.getAction();
 
-            final String boot = Intent.ACTION_BOOT_COMPLETED;
-            final String date = Intent.ACTION_BOOT_COMPLETED;
-            final String time = Intent.ACTION_BOOT_COMPLETED;
-            final String timeZone = Intent.ACTION_BOOT_COMPLETED;
-
-            if (action != null &&
-                    (action.equals(boot) || action.equals(date) || action.equals(time) || action.equals(timeZone))
-                    ) {
+            if (action != null && action.equals(Intent.ACTION_BOOT_COMPLETED)) {
                 //create intent to AppService
                 Intent rescheduleIntent = new Intent(context, AppService.class);
 

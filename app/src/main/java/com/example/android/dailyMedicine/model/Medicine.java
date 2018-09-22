@@ -131,7 +131,7 @@ public class Medicine {
         this.alarmTimes = alarmTimes;
     }
 
-    public void addTime(MedicineTime time){
+    public void addTime(MedicineTime time) {
         alarmTimes.add(time);
     }
 

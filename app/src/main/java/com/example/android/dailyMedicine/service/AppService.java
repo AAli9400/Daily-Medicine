@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
@@ -28,6 +29,7 @@ public class AppService extends IntentService {
 
     public static final String ACTION_NOTIFICATION = "notification";
     public static final String ACTION_RESCHEDULE = "reschedule";
+    public static final String ACTION_RESET_TAKEN_TIMES = "reset_taken_times";
 
     private static final String ACTION_INCREASE = "increase";
     private static final String ACTION_NOTHING = "nothing";
@@ -35,11 +37,12 @@ public class AppService extends IntentService {
     public static final String MEDICINE_KEY = "medicine";
     private static final String MEDICINE_ID_KEY = "medicine_id";
 
-    private final String CHANNEL_ID;
+    private final String CHANNEL_ID = "Daily Medicine";
+    private final String NOTIFICATIONS_GROUP_KEY = "DailyMedicineNotificationsGroupKey";
+
 
     public AppService() {
         super("AppService");
-        CHANNEL_ID = "Daily Medicine";
     }
 
     @Override
@@ -63,12 +66,12 @@ public class AppService extends IntentService {
                         rescheduleAlarms();
                         break;
                     case ACTION_INCREASE:
-                        //if action == reschedule
+                        //if action == increase
                         //get the id from the intent
                         int id1 = intent.getIntExtra(MEDICINE_ID_KEY, -1);
 
                         //increase the taken time using the passed medicine id
-                        Increase(id1);
+                        IncreaseMedicineTakenTimes(id1);
                         break;
                     case ACTION_NOTHING:
                         //if action == nothing
@@ -77,6 +80,10 @@ public class AppService extends IntentService {
 
                         //cancel the notification
                         cancelNotification(id2);
+                        break;
+                    case ACTION_RESET_TAKEN_TIMES:
+                        //reset all medicines taken times for a new day
+                        resetAllMedicinesTakenTimes();
                         break;
                 }
             }
@@ -141,14 +148,22 @@ public class AppService extends IntentService {
         createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentText("Don't forget you medicine: " + medicine.getName())
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText("Don't forget your medicine: " + medicine.getName())
                 .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setGroup(NOTIFICATIONS_GROUP_KEY)
+                .setVibrate(new long[]{100, 100, 100})
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setVisibility(VISIBILITY_PUBLIC)
                 .setContentIntent(tapPendingIntent)
                 .addAction(R.drawable.ic_done_white_24dp, "Took it", actionDonePendingIntent)
                 .addAction(R.drawable.ic_cancel_white_24dp, "Cancel", actionCancelPendingIntent);
+
+        Bitmap picture = medicine.getPicture();
+        if (picture != null) {
+            builder.setLargeIcon(picture);
+        }
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
@@ -164,20 +179,25 @@ public class AppService extends IntentService {
         int numOfAlarms = alarmTimes.size();
         int i = 0;
 
-        int dayInMills = 0;
+        //get instance of MedicineDao
+        MedicineDao dao = AppDatabase.getInstance(this).medicineDao();
 
-        final MedicineAlarmUtil alarmUtil = MedicineAlarmUtil.getInstance(getApplication());
+        //get instance of MedicineAlarmUtil
+        MedicineAlarmUtil alarmUtil = MedicineAlarmUtil.getInstance(this.getApplication());
+
+        int dayInMills = 0;
 
         for (; i < numOfAlarms; ++i) {
             MedicineTime time = alarmTimes.get(i);
             long triggerTime = alarmUtil.createTriggerTime(time.getHourOfDay(), time.getMinute()) + dayInMills;
 
             if (triggerTime > System.currentTimeMillis()) {
+                //schedule the alarm
                 alarmUtil.set(triggerTime, medicine);
 
                 //update the medicine with the next alarm
                 medicine.setNextAlarm(new Gson().toJson(time));
-                AppDatabase.getInstance(getApplication()).medicineDao().updateMedicine(medicine);
+                dao.updateMedicine(medicine);
 
                 break;
             }
@@ -211,31 +231,23 @@ public class AppService extends IntentService {
     }
 
     private void rescheduleAlarms() {
+        //get instance of MedicineDao
+        MedicineDao dao = AppDatabase.getInstance(this).medicineDao();
+
+        //get instance of MedicineAlarmUtil
+        MedicineAlarmUtil alarmUtil = MedicineAlarmUtil.getInstance(getApplication());
+
         //get all  medicines
-        final List<Medicine> medicines = AppDatabase.getInstance(this).medicineDao().loadAllMedicines().getValue();
+        final List<Medicine> medicines = dao.loadAllMedicinesAsList();
 
         //if the list is not null
         if (medicines != null) {
-            //get instance of MedicineAlarmUtil
-            final MedicineAlarmUtil alarmUtil = MedicineAlarmUtil.getInstance(getApplication());
-
-            //for each medicine
             for (Medicine medicine : medicines) {
                 //cancel any existed alarm
                 alarmUtil.cancelAlarm(medicine);
 
-                //get all medicine times
-                ArrayList<MedicineTime> times = medicine.getAlarmTimes();
-
-                //for each time
-                for (MedicineTime time : times) {
-                    //get the trigger time as long
-                    long triggerTime = alarmUtil.createTriggerTime(time.getHourOfDay(), time.getMinute());
-
-                    //schedule the alarm
-                    alarmUtil.set(triggerTime, medicine);
-
-                }
+                //schedule the next alarm
+                scheduleNextAlarm(medicine);
             }
         }
     }
@@ -247,12 +259,12 @@ public class AppService extends IntentService {
         notificationManager.cancel(id);
     }
 
-    private void Increase(int id) {
-        //first: cancel the notification
-        cancelNotification(id);
-
+    private void IncreaseMedicineTakenTimes(int id) {
         //get instance of MedicineDao
         MedicineDao dao = AppDatabase.getInstance(this).medicineDao();
+
+        //first: cancel the notification
+        cancelNotification(id);
 
         //get the current taken times
         int takenTimes = dao.getTakenTimes(id);
@@ -268,5 +280,31 @@ public class AppService extends IntentService {
             //then update it
             dao.updateTakenTimes(id, takenTimes);
         }
+    }
+
+    private void resetAllMedicinesTakenTimes() {
+        //get instance of MedicineDao
+        MedicineDao dao = AppDatabase.getInstance(this).medicineDao();
+
+        //get instance of MedicineAlarmUtil
+        MedicineAlarmUtil alarmUtil = MedicineAlarmUtil.getInstance(this.getApplication());
+
+
+        //get all medicines
+        final List<Medicine> medicines = dao.loadAllMedicinesAsList();
+
+        //if the list is not null
+        if (medicines != null) {
+            for (Medicine medicine : medicines) {
+                //reset medicine taken times to 0
+                medicine.setTakenTimes(0);
+
+                //update the medicine
+                dao.updateMedicine(medicine);
+            }
+        }
+
+        //reschedule the alarm for the next day
+        alarmUtil.scheduleResettingAllMedicinesTakenTimesDaily();
     }
 }

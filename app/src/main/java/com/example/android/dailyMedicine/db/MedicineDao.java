@@ -18,6 +18,9 @@ public interface MedicineDao {
     @Query("SELECT * FROM Medicine")
     LiveData<List<Medicine>> loadAllMedicines();
 
+    @Query("SELECT * FROM Medicine")
+    List<Medicine> loadAllMedicinesAsList();
+
     @Insert
     long insertMedicine(Medicine medicine);
 
